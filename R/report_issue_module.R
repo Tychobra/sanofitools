@@ -80,7 +80,7 @@ report_issue_module <- function(
             "Submit",
             class = "btn btn-primary",
             style = "color: #FFF; width: 150px;"
-          )
+          ) %>% shinyjs::disabled()
         ),
         shiny::textInput(
           ns("title"),
@@ -102,6 +102,21 @@ report_issue_module <- function(
     )
 
   }, ignoreInit = TRUE)
+
+  observeEvent(input$title, {
+    hold_title <- input$title
+    if (is.null(hold_title) || hold_title == "") {
+      showFeedbackDanger(
+        "title",
+        text = "title cannot be empty"
+      )
+      shinyjs::disable("submit_issue")
+    } else {
+      hideFeedback("title")
+      shinyjs::enable("submit_issue")
+    }
+
+  }, ignoreNULL = FALSE)
 
 
   observeEvent(input$submit_issue, {
