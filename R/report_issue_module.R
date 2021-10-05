@@ -121,7 +121,7 @@ report_issue_module <- function(
       )
 
       new_issue_res <- gh::gh(
-        "POST /repos/{repo_name}/issues",
+        "POST /repos/{repo}/issues",
         repo = repo,
         .token = gh_pat,
         .send_headers = c(
