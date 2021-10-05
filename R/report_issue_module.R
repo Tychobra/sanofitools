@@ -95,7 +95,8 @@ report_issue_module <- function(
         ),
         shiny::fileInput(
           ns("attachments"),
-          "Attachments"
+          "Attachments",
+          multiple = TRUE
         )
       )
     )
