@@ -44,7 +44,7 @@ report_issue_module_dash_ui <- function(id) {
 #' @importFrom jsonlite toJSON
 #' @importFrom shiny reactiveVal observeEvent showModal modalDialog modalButton actionButton textInput textAreaInput removeModal
 #' @importFrom shinyjs onclick
-#' @importFrom shinyFeedback showToast
+#' @importFrom shinyFeedback showToast loadingButton resetLoadingButton
 #'
 #'
 report_issue_module <- function(
@@ -71,7 +71,7 @@ report_issue_module <- function(
         title = "Report Issue",
         footer = tagList(
           shiny::modalButton("Cancel"),
-          shiny::actionButton(
+          shinyFeedback::loadingButton(
             ns("submit_issue"),
             "Submit",
             class = "btn-primary",
@@ -88,6 +88,10 @@ report_issue_module <- function(
           "Description",
           width = "100%",
           height = "200px"
+        ),
+        shiny::fileInput(
+          ns("attachments"),
+          "Attachments"
         )
       )
     )
@@ -137,6 +141,7 @@ report_issue_module <- function(
 
     }, error = function(err) {
 
+      shinyFeedback::resetLoadingButton("submit_issue")
       msg <- "unable to create issue"
       print(msg)
       print(err)
@@ -144,6 +149,8 @@ report_issue_module <- function(
 
       invisible(NULL)
     })
+
+
 
   })
 
