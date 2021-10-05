@@ -1,0 +1,22 @@
+Package: tbiotools
+Type: Package
+Title: TBio Tools
+Version: 0.0.0.9000
+Authors@R: c(person("Andy", "Merlino", email = "andy.merlino@tychobra.com", role = c("aut", "cre")))
+Maintainer: Andy Merlino <andy.merlino@tychobra.com>
+Description: A collection of R functions and Shiny modules for use across projects.
+License: Translate Bio Proprietary Package 
+URL: https://github.com/Tychobra/tbiotools
+BugReports: https://github.com/Tychobra/tbiotools/issues
+Encoding: UTF-8
+Imports:
+    gh,
+    jsonlite,
+    shiny,
+    shinyFeedback,
+    shinyjs
+Suggests:
+    testthat (>= 3.0.0),
+    config
+RoxygenNote: 7.1.2
+Config/testthat/edition: 3
