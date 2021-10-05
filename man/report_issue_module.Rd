@@ -4,7 +4,7 @@
 \alias{report_issue_module}
 \title{Report Issue Module Server}
 \usage{
-report_issue_module(input, output, session, repo, gh_pat)
+report_issue_module(input, output, session, repo, gh_pat, gcs_bucket_name)
 }
 \arguments{
 \item{input}{the Shiny input}
@@ -16,6 +16,8 @@ report_issue_module(input, output, session, repo, gh_pat)
 \item{repo}{the name of the repo to create the issue in.  e.g. "tychobra/lipids_study"}
 
 \item{gh_pat}{the GitHub PAT}
+
+\item{gcs_bucket_name}{the Google Cloud Storage bucket name}
 }
 \description{
 Report Issue Module Server

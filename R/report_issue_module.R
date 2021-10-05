@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @importFrom shiny NS tags
+#' @importFrom shinyFeedback useShinyFeedback
 #'
 #' @return "Report Issue" button to go in the top bar of a shinydashboard Shiny app.
 #'
@@ -15,6 +16,7 @@ report_issue_module_dash_ui <- function(id) {
 
   tags$li(
     class = "dropdown",
+    tags$head(shinyFeedback::useShinyFeedback()),
     tags$a(
       id = ns("report_bug"),
       href = "#",
@@ -37,6 +39,7 @@ report_issue_module_dash_ui <- function(id) {
 #' @param session the Shiny session
 #' @param repo the name of the repo to create the issue in.  e.g. "tychobra/lipids_study"
 #' @param gh_pat the GitHub PAT
+#' @param gcs_bucket_name the Google Cloud Storage bucket name
 #'
 #' @export
 #'
@@ -52,7 +55,8 @@ report_issue_module <- function(
   output,
   session,
   repo,
-  gh_pat
+  gh_pat,
+  gcs_bucket_name
 ) {
   ns <- session$ns
 
@@ -74,7 +78,7 @@ report_issue_module <- function(
           shinyFeedback::loadingButton(
             ns("submit_issue"),
             "Submit",
-            class = "btn-primary",
+            class = "btn btn-primary",
             style = "color: #FFF"
           )
         ),
@@ -106,7 +110,7 @@ report_issue_module <- function(
       hold_email <- session$userData$user()$email
     }
 
-
+    hold_attachments <- input$attachments
     tryCatch({
 
       body_list <- list(
@@ -118,6 +122,30 @@ report_issue_module <- function(
         ),
         assignee = "merlinoa"
       )
+
+      if (!is.null(hold_attachments)) {
+        # upload attachments to Google Cloud Storage and include links to the
+        # attachments in the markdown sent with the GitHub Issue
+        md_links <- c()
+        file_url <- paste0("gh_attachment/", uuid::UUIDgenerate())
+        for (i in seq_len(nrow(hold_attachments))) {
+
+          the_row <- hold_attachments[i, ]
+          gcs_upload_res <- googleCloudStorageR::gcs_upload(
+            file = the_row$datapath,
+            bucket = gcs_bucket_name,
+            name = file_url,
+            predefinedAcl = "publicRead"
+          )
+
+          md_links[i] <- paste0("[", the_row$name, "](https://storage.googleapis.com/", gcs_bucket_name, "/", file_url, ")")
+        }
+
+        md_links_string <- paste(md_links, collapse = "\n")
+
+        body_list$body <- paste0(body_list$body, "\n\n Attachments: \n", md_links_string)
+      }
+
 
       body_json <- jsonlite::toJSON(
         body_list,
@@ -134,6 +162,8 @@ report_issue_module <- function(
         ),
         charToRaw(body_json)
       )
+
+
 
       shiny::removeModal()
 
