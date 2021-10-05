@@ -79,7 +79,7 @@ report_issue_module <- function(
             ns("submit_issue"),
             "Submit",
             class = "btn btn-primary",
-            style = "color: #FFF"
+            style = "color: #FFF; width: 150px;"
           )
         ),
         shiny::textInput(
