@@ -40,6 +40,8 @@ report_issue_module_dash_ui <- function(id) {
 #' @param repo the name of the repo to create the issue in.  e.g. "tychobra/lipids_study"
 #' @param gh_pat the GitHub PAT
 #' @param gcs_bucket_name the Google Cloud Storage bucket name
+#' @param assignees optional - character vector of GitHub usernames to assign to the GitHub
+#' issue.
 #'
 #' @export
 #'
@@ -56,7 +58,8 @@ report_issue_module <- function(
   session,
   repo,
   gh_pat,
-  gcs_bucket_name
+  gcs_bucket_name,
+  assignees = NULL
 ) {
   ns <- session$ns
 
@@ -135,9 +138,12 @@ report_issue_module <- function(
           "Created By: ", hold_email,
           "\n\n",
           input$description
-        ),
-        assignee = "merlinoa"
+        )
       )
+
+      # use I() so that autounbox will not work (e.g. it will stay as an array even if there is only 1
+      # element in the vector)
+      body_list$assignees <- I(assignees)
 
       if (!is.null(hold_attachments)) {
         # upload attachments to Google Cloud Storage and include links to the

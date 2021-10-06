@@ -4,7 +4,15 @@
 \alias{report_issue_module}
 \title{Report Issue Module Server}
 \usage{
-report_issue_module(input, output, session, repo, gh_pat, gcs_bucket_name)
+report_issue_module(
+  input,
+  output,
+  session,
+  repo,
+  gh_pat,
+  gcs_bucket_name,
+  assignees = NULL
+)
 }
 \arguments{
 \item{input}{the Shiny input}
@@ -18,6 +26,9 @@ report_issue_module(input, output, session, repo, gh_pat, gcs_bucket_name)
 \item{gh_pat}{the GitHub PAT}
 
 \item{gcs_bucket_name}{the Google Cloud Storage bucket name}
+
+\item{assignees}{optional - character vector of GitHub usernames to assign to the GitHub
+issue.}
 }
 \description{
 Report Issue Module Server
