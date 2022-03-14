@@ -20,7 +20,7 @@ report_issue_module_dash_ui <- function(id) {
     tags$a(
       id = ns("report_bug"),
       href = "#",
-      onclick="return false;",
+      onclick = "return false;",
       tags$div(
         tags$i(
           class = "fa fa-bug"
@@ -45,11 +45,14 @@ report_issue_module_dash_ui <- function(id) {
 #'
 #' @export
 #'
+#' @importFrom magrittr %>%
 #' @importFrom gh gh
+#' @importFrom googleCloudStorageR gcs_upload
 #' @importFrom jsonlite toJSON
-#' @importFrom shiny reactiveVal observeEvent showModal modalDialog modalButton actionButton textInput textAreaInput removeModal
-#' @importFrom shinyjs onclick
-#' @importFrom shinyFeedback showToast loadingButton resetLoadingButton
+#' @importFrom shiny reactiveVal observeEvent showModal modalDialog modalButton tagList textInput textAreaInput removeModal
+#' @importFrom shinyjs disable disabled enable onclick
+#' @importFrom shinyFeedback hideFeedback showFeedbackDanger showToast loadingButton resetLoadingButton
+#' @importFrom uuid UUIDgenerate
 #'
 #'
 report_issue_module <- function(
